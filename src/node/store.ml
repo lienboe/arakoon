@@ -622,6 +622,17 @@ struct
         f tx
 
   let _insert_update store (update:Update.t) kt =
+    let get_key = function
+      | Update.Set (key,_)
+      | Update.Delete key
+      | Update.TestAndSet (key, _, _)
+      | Update.Replace (key, _)
+      | Update.Assert_exists (key)
+      | Update.Assert (key, _) ->
+        Some key
+      | _ ->
+        None
+    in
     let rec _do_one update tx =
       let return () = Lwt.return (Ok None) in
       let wrap f =
@@ -649,11 +660,6 @@ struct
           Lwt.return (Ok ro)
         | Update.Sequence updates
         | Update.SyncedSequence updates ->
-          let get_key = function
-            | Update.Set (key,value) -> Some key
-            | Update.Delete key -> Some key
-            | Update.TestAndSet (key, expected, wanted) -> Some key
-            | _ -> None in
           Lwt_list.iter_s (fun update ->
               (Lwt.catch
                  (fun () -> _do_one update tx)
@@ -767,12 +773,6 @@ struct
         | Update.Replace(k, wanted) ->
           update_in_tx (fun tx -> _do_one update tx)
 
-    in
-    let get_key = function
-      | Update.Set (key,value) -> Some key
-      | Update.Delete key -> Some key
-      | Update.TestAndSet (key, expected, wanted) -> Some key
-      | _ -> None
     in
     try
       do_one update
