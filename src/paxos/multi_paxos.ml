@@ -339,7 +339,7 @@ let handle_prepare (type s) constants dest n n' i' =
             end
           in
 
-          if ( n' > n && i' < nak_max && nak_max <> Sn.start ) || n' <= n
+          if (i' < nak_max && nak_max <> Sn.start ) || n' < n
           then
             (* Send Nak, other node is behind *)
             let reply = Nak( n',(n,nak_max)) in
