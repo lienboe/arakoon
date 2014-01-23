@@ -132,7 +132,7 @@ let _dump_tlc ~tlcs node =
 
 
 let post_failure () =
-  let lease_period = 2 in
+  let lease_period = 1 in
   let node0 = "was_master" in
   let node1 = "was_slave1" in
   let node2 = "was_slave2" in
@@ -145,7 +145,7 @@ let post_failure () =
     batched_transaction_cfgs = [_make_batched_transaction_cfg ()];
     _master = Elected;
     quorum_function = Quorum.quorum_function;
-    _lease_period = 2;
+    _lease_period = 1;
     cluster_id = "ricky";
     plugins = [];
     nursery_cfg = None;
@@ -194,7 +194,7 @@ let post_failure () =
 
 
 let restart_slaves () =
-  let lease_period = 2 in
+  let lease_period = 1 in
   let node0 = "slave0" in
   let node1 = "slave1" in
   let node2 = "was_master" in
@@ -207,7 +207,7 @@ let restart_slaves () =
      batched_transaction_cfgs = [_make_batched_transaction_cfg ()];
      _master = Elected;
      quorum_function = Quorum.quorum_function;
-     _lease_period = 2;
+     _lease_period = 1;
      cluster_id = "ricky";
      plugins = [];
      nursery_cfg = None;
@@ -255,7 +255,7 @@ let restart_slaves () =
 
 
 let ahead_master_loses_role () =
-  let lease_period = 2 in
+  let lease_period = 1 in
   let node0 = "slave0" in
   let node1 = "slave1" in
   let node2 = "was_master" in
@@ -268,7 +268,7 @@ let ahead_master_loses_role () =
      batched_transaction_cfgs = [_make_batched_transaction_cfg ()];
      _master = Elected;
      quorum_function = Quorum.quorum_function;
-     _lease_period = 2;
+     _lease_period = 1;
      cluster_id = "ricky";
      plugins = [];
      nursery_cfg = None;

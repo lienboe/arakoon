@@ -24,7 +24,7 @@ let section = Logger.Section.main
 
 let config_file = ref "cfg/arakoon.ini"
 
-let default_lease_period = 10
+let default_lease_period = 1
 let default_max_value_size = 8 * 1024 * 1024
 let default_max_buffer_size = 32 * 1024 * 1024
 let default_client_buffer_capacity = 32

@@ -8,7 +8,7 @@ let section = Logger.Section.main
 let stop = ref false
 
 let setup tn master base () =
-  let lease_period = 10 in
+  let lease_period = 1 in
   stop := false;
   let make_config () = Node_cfg.Node_cfg.make_test_config ~base 3 master lease_period in
   let t0 = Node_main.test_t make_config "t_arakoon_0" stop >>= fun _ -> Lwt.return () in
