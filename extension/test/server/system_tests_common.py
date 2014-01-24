@@ -919,18 +919,6 @@ def create_and_wait_for_threads ( thr_cnt, iter_cnt, f, timeout=None ):
 
     create_and_wait_for_thread_list( f_list, timeout)
 
-def simple_set(client, key, value):
-    client.set( key, value )
-
-def assert_get( client, key, value):
-    assert_equals( client.get(key), value )
-
-def set_get_and_delete( client, key, value):
-    client.set( key, value )
-    assert_equals( client.get(key), value )
-    client.delete( key )
-    assert_raises ( ArakoonNotFound, client.get, key )
-
 def generic_retrying_ ( client, f, is_valid_ex, duration = 5.0 ) :
     start = time.time()
     failed = True
@@ -969,6 +957,23 @@ def generic_retrying_set_get_and_delete( client, key, value, is_valid_ex ):
         generic_retrying_ (client, (lambda : client.delete( key ) ) , is_valid_ex, duration = 60.0 )
     except ArakoonNotFound:
         pass
+
+def assert_get( client, key, value):
+    assert_equals( client.get(key), value )
+
+def simple_set(client, key, value):
+    def validate_ex (ex, tryCnt):
+        validEx = isinstance (ex, ArakoonNodeNoLongerMaster)
+        if validEx:
+            logging.debug( "Ignoring exception: %s", ex)
+
+    generic_retrying_ (client, (lambda : client.set( key, value)), validate_ex, duration = 60.0)
+
+def set_get_and_delete( client, key, value):
+    client.set( key, value )
+    assert_get(client, key, value)
+    client.delete( key )
+    assert_raises ( ArakoonNotFound, client.get, key )
 
 def retrying_set_get_and_delete( client, key, value ):
     def validate_ex ( ex, tryCnt ):
