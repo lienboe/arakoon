@@ -22,6 +22,8 @@ open OUnit_XML
 open OUnit
 open Tlogcommon
 
+open Raft
+
 open Node_cfg
 type local_action =
   | ShowUsage
